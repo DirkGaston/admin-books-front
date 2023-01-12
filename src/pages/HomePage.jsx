@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Col, Row, Typography } from 'antd'
 
 import { fetchGetBooksList } from '../api/books'
@@ -8,24 +8,15 @@ import Table from '../components/TableComponent'
 const { Title, Paragraph } = Typography
 
 const Home = () => {
-  useEffect(() => {
-    fetchGetBooksList()
-  }, [])
+  const [books, setBooks] = useState([]);
 
-  const dataSource = [
-    {
-      id: 1,
-      title: 'Harry Potter and the Half-Blood Prince (Harry Potter  #6)',
-      authors: 'J.K. Rowling/Mary GrandPré',
-      average_rating: '4.57',
-      isbn: '439785960',
-      isbn13: '9780439785969',
-      language_code: 'eng',
-      num_pages: 652,
-      publication_date: '9/16/2006',
-      publisher: 'Scholastic Inc.'
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const data = await fetchGetBooksList();
+      setBooks(data);
     }
-  ]
+    fetchBooks();
+  }, [])
 
   const columns = [
     {
@@ -95,7 +86,7 @@ const Home = () => {
 
       <Row justify='center'>
         <Col span={20}>
-          <Table dataSource={dataSource} columns={columns} />
+          <Table dataSource={books} columns={columns} />
         </Col>
       </Row>
     </>
